@@ -1,0 +1,95 @@
+.FooterWrapper{
+    box-sizing: border-box;
+    padding:var(--spaceside);
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 10%;
+    width: 100%;
+    height: auto;
+    background-color: var(--bgcolorM);
+}
+
+.QuestionLabel{
+    position: relative;
+    display: block;
+    font-size: clamp(var(--fontsizeW), 4vw, 7vw);
+    font-family: var(--fontF);
+    text-transform: uppercase;
+    font-weight: 700;
+    color:#fff;
+}
+
+.ContactsInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.InfoLabel{
+    position: relative;
+    display: inline;
+    font-size: 24px;
+    font-family: var(--fontF);
+    color:#fff;
+    text-transform: uppercase;
+}
+.InfoFooter{
+    width: fit-content;
+    cursor: pointer;
+    margin-top: 3%;
+    position: relative;
+    box-sizing: border-box;
+    padding: 22px 14px 25px;
+    font-family: var(--fontF);
+    font-size: clamp(.7rem, 3vw, 2rem);
+    background-color: var(--akcentTransparent);
+    /*border-radius: 15px;*/
+    color:white;
+    transition: .6s all ease-out;
+}
+.InfoFooter:hover{
+    color: #292927;
+}
+.copyHandler{
+    position: absolute;
+    font-size: 15px;
+    display: block;
+    opacity: 0;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: #000;
+    padding: 5px;
+    text-wrap: nowrap;
+    top: 20px;
+    transition: .3s;
+    color:#fff;
+}
+.copyActive{
+    top: -20px;
+    opacity: 1;
+}
+@media screen and (max-width:450px) {
+    .FooterWrapper{
+        box-sizing: border-box;
+        padding:var(--spaceside);
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 5%;
+        width: 100%;
+        height: auto;
+        background-color: var(--bgcolorM);
+    }
+    .ContactsInfo{
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+    .QuestionLabel{
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 5%;
+    }
+}
