@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,9 @@ Route::get('/', function () {
 
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
 
+Route::prefix('admin')->middleware(['auth', 'verified'])->group(function(){
+    Route::get('/', [AdminController::class, 'index'])->name('adminMain');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
