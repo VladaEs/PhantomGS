@@ -25,10 +25,10 @@
        <div class="PageWrapper">
         <header>
             <ul class="desktop">
-                <li data-pageId="0"><a href="/" >Main</a></li>
-                <li data-pageId="1"><a href="/services" >Services</a></li>
-                <li data-pageId="2"><a href="/contacts" >Contacts</a></li>
-                <li data-pageId="3"><a href="/products" >Products</a></li>
+                <li data-pageId="0"><a href="{{ route('home') }}" >Main</a></li>
+                <li data-pageId="1"><a href="{{ route('services') }}" >Services</a></li>
+                <li data-pageId="2"><a href="{{ route('contacts') }}" >Contacts</a></li>
+                <li data-pageId="3"><a href="{{ route('products') }}" >Products</a></li>
             </ul>
             <label class="burger" for="burger">
                 <input type="checkbox" id="burger" class="burgerInput">
@@ -39,10 +39,10 @@
               <div class="MenuFullScreen">
                 <div class="MenuTitle">Menu Phantom Gunsmith</div>
                 <ul class="phone">
-                    <li data-pageId="0"><a href="/" >Main</a></li>
-                    <li data-pageId="1"><a href="/services" >Services</a></li>
-                    <li data-pageId="2"><a href="/contacts" >Contacts</a></li>
-                    <li data-pageId="3"><a href="/products" >Products</a></li>
+                    <li data-pageId="0"><a href="{{ route('home') }}" >Main</a></li>
+                    <li data-pageId="1"><a href="{{ route('services') }}" >Services</a></li>
+                    <li data-pageId="2"><a href="{{ route('contacts') }}" >Contacts</a></li>
+                    <li data-pageId="3"><a href="{{ route('products') }}" >Products</a></li>
                 </ul>
               </div>
         </header>
