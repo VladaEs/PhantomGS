@@ -1,0 +1,54 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+
+:root{
+    --spaceside:5%;
+    --bgcolorS:#100f10;
+    --bgcolorM:#1b1b1b;
+    --bgcolorW:#242424;
+    --fontcolorS:rgba(255, 255, 255, 0.922);
+    --fontcolorM:rgba(255, 255, 255, 0.67);
+    --fontcolorW:rgba(255, 255, 255, 0.45);
+    --fontsizeS:4.5rem;
+    --fontsizeM:1.75rem;
+    --fontsizeW:0.875rem;
+    --fontF: 'Inter', sans-serif;
+    --akcent:#12452c;
+    --akcentTransparent:#718E80;
+  }
+  a:active,
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+  .page{
+    position: absolute;
+  }
+  .page-enter-active{
+    animation: fade-in 1s forwards;
+  }
+  .page-exit-active{
+    animation: fade-out  1s forwards;
+  }
+  ::-webkit-scrollbar {
+    z-index: 10000;
+    width: 7px;
+    background-color: #f9f9fd;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #223c50;
+}
+*{
+  margin:0;
+  padding: 0;
+}
+body, html{
+  width:100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-size: 1rem;
+  background-color: var(--bgcolorS);
+ 
+}
