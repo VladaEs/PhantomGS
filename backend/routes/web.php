@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,12 +12,17 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
-Route::get('/contacts', [ServicesController::class, 'index'])->name('contacts');
-Route::get('/products', [ServicesController::class, 'index'])->name('products');
+Route::get('/services/{id}',[ServicesController::class, 'showService'])->name('servicePage');
+
+
+Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
+Route::get('/products', [StoreController::class, 'index'])->name('products');
+
+
+
 
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function(){
     Route::get('/', [AdminController::class, 'index'])->name('adminMain');
-
     Route::get('/createService', [AdminController::class, 'CreateService'])->name('newService');
     Route::post('/createService', [AdminController::class, 'StoreService'])->name('StoreService');
 });

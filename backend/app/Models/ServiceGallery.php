@@ -11,6 +11,8 @@ class ServiceGallery extends Model
         'service_id', 'image_id',
     ];
     public function scopeGetGallery($query, $service_id){
-        return $query->where('service_id', $service_id);
+        return $query->join('gallery_images', 'gallery_images.id', '=', 'service_gallery.image_id')
+        ->where('service_gallery.service_id', $service_id);
     }
+    
 }
