@@ -6,6 +6,8 @@ use App\Models\Service;
 use App\Models\GalleryImage;
 use Illuminate\Http\Request;
 use App\Models\ServiceGallery;
+use App\Models\ShopItem;
+use App\Models\ShopItemGallery;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,7 +24,8 @@ class AdminController extends Controller
         return view('admin.createService');
     }
 
-    public function StoreService(Request $request){
+    public function StoreService(Request $request)
+    {
 
 
         $validated = $request->validate([
@@ -50,8 +53,8 @@ class AdminController extends Controller
 
 
         //saving image to the gallery table to get the ID and insert it in services table
-        $newService ='';
-        DB::transaction(function () use ($folder, $request, & $newService) {
+        $newService = '';
+        DB::transaction(function () use ($folder, $request, &$newService) {
             $path = $request->file('serviceImage')->store($folder, 'public');
             $filename = basename($path);
 
@@ -101,5 +104,53 @@ class AdminController extends Controller
 
 
         return redirect()->route('servicePage', $newService['id']);
+    }
+    public function createShopItem()
+    {
+        $services = Service::select('id', 'service_name')->get();
+        return view('admin.createShopItem', ['services' => $services]);
+    }
+    public function StoreShopItem(Request $request)
+    {
+
+
+        $validated = $request->validate([
+            'itemName' => ['required', 'string', 'max:255'],
+            'itemDescription' => ['required', 'string', 'max:1000'],
+            'itemPrice' => ['required', 'integer', 'gt:0'],
+            'associatedService' => ['required', 'integer'],
+            'ItemGallery' => ['required', 'array'],
+            'ItemGallery.*' => ['image', 'mimes:jpg,jpeg,png', 'max:15000'],
+
+        ]);
+        
+        $newProduct = ShopItem::create([
+            'title' => $validated['itemName'],
+            'description' => $validated['itemDescription'],
+            'price' => $validated['itemPrice'],
+            'associatedService' => $validated['associatedService'],
+            'service_id' => $validated['itemPrice'],
+        ]);
+
+        $folder = 'shopImages';
+        DB::transaction(function () use ($folder, $request, $newProduct) {
+            $gallery = $request->file('ItemGallery');
+            if (is_iterable($gallery)) {
+                foreach ($gallery as $image) {
+                    $path = $image->store($folder, 'public');
+                    $filename = basename($path);
+                    $itemImageGal = GalleryImage::create([
+                        'image_location' => $folder,
+                        'image_name' => $filename,
+                    ]);
+                    $galeryImage = ShopItemGallery::create([
+                        'item_id' => $newProduct['id'],
+                        'image_id' => $itemImageGal['id'],
+                    ]);
+                }
+            }
+        });
+        
+        return redirect()->route('newShopItem')->with('success', 'item has been created');
     }
 }

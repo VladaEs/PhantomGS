@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     selectPagesHandler(amountPages);
     priceDateFilterHandler(priceFilter, dateFilter);
     arrowPrice();
+
+    loadItems();
 })
 
 function selectHandler(labels) { // category filters handler
@@ -123,4 +125,55 @@ function arrowPrice() {// обработчик фильтра цены(ввер�
             }
         })
     })
+}
+
+function loadItems(){
+    let category= [];
+    let price= "ASC";
+    let date = "ASC";
+    let limit = 10;
+    let selectLabels= document.querySelectorAll('.SelectLabels');
+    selectLabels.forEach(item=> 
+        item.addEventListener('click', function(){
+            let dataId = Number(item.getAttribute('data-id'));
+            if(dataId == 0){
+                category.length = 0;
+                category = [0];
+            }
+            else if(!category.includes(dataId)){
+                if(category[0]==0){
+                    category = [];
+                }
+                category.push(dataId);
+            }
+            else{
+                let index = category.indexOf(dataId);
+                if(index > -1){
+                    category.splice(index, 1);
+                }
+            }
+    }));
+
+    let priceFilter = document.querySelector('.priceFilter');
+    priceFilter.addEventListener('click', function(){
+        price == "ASC" ? "DESC" : "ASC"
+    });
+    let dateFilter = document.querySelector('.dateFilter');
+    dateFilter.addEventListener('click', function(){
+        date == "ASC" ? "DESC" : "ASC"
+    });
+    let selectPages= document.querySelectorAll('.PagesSelect');
+    selectPages.forEach(item=>{
+        item.addEventListener('click', function(){
+            let pagesAmount = item.getAttribute('data-pageAmount');
+            if(limit> 100){ // prevent database overload
+                return;
+            }
+            limit = pagesAmount;
+        });
+    });
+
+    
+
+    fetch('/products/loaditems?')
 }

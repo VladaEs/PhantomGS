@@ -20,7 +20,8 @@ class ServicesController extends Controller
         
         $serviceId= $id;
         
-        $service = Service::where('services.id', $id)->GetBGImage()->first();
+        $service = Service::where('services.id', $id)->WithImages()->first();
+        
         $gallery = ServiceGallery::GetGallery($id)->get();
         
         return view('services.service.index', ["service"=> $service, 'gallery'=> $gallery]);

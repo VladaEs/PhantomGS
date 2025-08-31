@@ -26,7 +26,7 @@
 
 
         <x-form method="POST" action="{{ route('StoreService') }}" enctype="multipart/form-data"
-            class=" mx-auto w-[40%] widthForm">
+            class=" mx-auto w-[40%] widthForm text-white">
 
             <div class="mb-10">
                 <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Service Name</label>

@@ -105,15 +105,15 @@
             </div>
         </div>
 
-        <div class='filterSection priceFilter'>Price <div class="arrowChange price"></div>
+        <div class='filterSection priceFilter' wire:click="$emitTo('store-items','setPriceOrder')">Price <div class="arrowChange price"></div>
         </div>
-        <div class='filterSection dateFilter'>Date <div class="arrowChange date"></div>
+        <div class='filterSection dateFilter' wire:click="setDateOrder">Date <div class="arrowChange date"></div>
         </div>
         <div>
             <span class="filterSection pages">Elements on page</span>
             <div class="PagesItems">
                 @foreach($elementsOnPage as $item)
-                <label class="PagesSelect" data-pageAmount="{{ $item }}">
+                <label class="PagesSelect" data-pageAmount="{{ $item }}" wire:click="setPerPage({{ $item }})">
                     {{ $item }}
                 <input type="radio" name="pages" value="{{ $item }}" class="PagesSelectInp">
                 </label>
@@ -126,7 +126,7 @@
     <div class="shopWrapper">
 
 
-
+        
 
 
     </div>
@@ -136,4 +136,7 @@
 
 @section('scripts')
     <script src="{{ asset('js/store/shop.js') }}"></script>
+
+
+    
 @endsection

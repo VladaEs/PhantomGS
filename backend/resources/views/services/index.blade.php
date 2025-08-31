@@ -13,6 +13,7 @@ Services
     <section class="services" id="services">
 
         @foreach ($services as $service)
+        
             <a href="{{ route('servicePage', $service['id']) }}" class="service">
                 <img src="{{ url('storage/'. $service['image_location'] .'/' . $service['image_name']) }}" class="serviceImg" alt="">
                 <div class="TextCenterService">

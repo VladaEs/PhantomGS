@@ -10,11 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
         ImagesWrapper.scrollLeft -= 150;
     });
     let images = document.querySelectorAll('.galleryElement');
-    console.log(images);
-    images.forEach(item=>{
-        item.addEventListener('click', ()=>{showPopUp(item)});
-    });
+    
+    setImageSize(images)
+
+    //console.log(images);
+    // images.forEach(item=>{
+    //     item.addEventListener('click', ()=>{showPopUp(item)});
+    // });
 });
+
+
+function setImageSize(images){
+    if(images.length <= 0){
+        return;
+    }
+
+    for(let i = 0; i< images.length; i++){
+        let height= images[i].naturalHeight;
+        let width = images[i].naturalWidth;
+        let id = images[i].getAttribute('data-orderImage');
+        let a  = document.querySelector(`[data-orderLink="${id}"]`);
+        a.setAttribute('data-pswp-height', height);
+        a.setAttribute('data-pswp-width', width);
+
+
+    }
+}
     function showPopUp(item){
         let popUp= document.querySelector('.popUp');
         let imagePopUp= document.querySelector('.popUp img');

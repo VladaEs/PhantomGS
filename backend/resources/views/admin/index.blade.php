@@ -11,7 +11,7 @@ Admin Panel
 @endsection
 
 @section('content')
-    <div class="relative flex flex-col gap-5 mt-12 items-center justify-center w-[100%] h-[70vh]">
+    <div class="relative flex flex-col gap-5 mt-12 mb-12 items-center justify-center w-[100%] h-[70vh] ">
         <span class="text-white text-6xl" >Admin Panel Navigation</span>
     <ul class="flex flex-wrap items-center justify-center  text-white text-2xl ">
     <li>
@@ -20,8 +20,10 @@ Admin Panel
     <li>
         <a href="#" class="me-4 hover:underline md:me-6">Edit a service |</a>
     </li>
-
+    <li>
+        <a href="{{ route('newShopItem') }}" class="me-4 hover:underline md:me-6">Create shop Item |</a>
     </li>
+    
 </ul>
 </div>
 @endsection

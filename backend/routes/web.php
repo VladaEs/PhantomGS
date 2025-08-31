@@ -16,7 +16,12 @@ Route::get('/services/{id}',[ServicesController::class, 'showService'])->name('s
 
 
 Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
-Route::get('/products', [StoreController::class, 'index'])->name('products');
+
+
+Route::prefix('products')->group(function(){
+    Route::get('/', [StoreController::class, 'index'])->name('products');
+});
+
 
 
 
@@ -25,6 +30,8 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function(){
     Route::get('/', [AdminController::class, 'index'])->name('adminMain');
     Route::get('/createService', [AdminController::class, 'CreateService'])->name('newService');
     Route::post('/createService', [AdminController::class, 'StoreService'])->name('StoreService');
+    Route::get('/createShopItem', [AdminController::class, 'createShopItem'])->name('newShopItem');
+    Route::post('/createShopItem', [AdminController::class, 'StoreShopItem'])->name('StoreShopItem');
 });
 
 
