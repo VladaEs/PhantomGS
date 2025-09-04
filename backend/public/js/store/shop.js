@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let amountPages = document.querySelectorAll('.PagesSelect');
     let priceFilter= document.querySelector('.priceFilter');
     let dateFilter= document.querySelector('.dateFilter');
+    sessionStorage.setItem('CurrentRequestPage', 0);// set the page number to 0
     selectHandler(labels);
     selectPagesHandler(amountPages);
     priceDateFilterHandler(priceFilter, dateFilter);
     arrowPrice();
-
     loadItems();
 })
 
@@ -128,6 +128,7 @@ function arrowPrice() {// обработчик фильтра цены(ввер�
 }
 
 function loadItems(){
+    intersectionObserver();
     let category= [];
     let price= "ASC";
     let date = "ASC";
@@ -152,28 +153,183 @@ function loadItems(){
                     category.splice(index, 1);
                 }
             }
+            sessionStorage.setItem("CurrentRequestPage", 1); 
+            let params = buildBodyRequest();
+            sendRequest(params).then(items =>{
+                drawItems(items, true);
+            });
+            
     }));
 
     let priceFilter = document.querySelector('.priceFilter');
     priceFilter.addEventListener('click', function(){
-        price == "ASC" ? "DESC" : "ASC"
+        price = price == "ASC" ? "DESC" : "ASC" ;
+        sessionStorage.setItem("CurrentRequestPage", 1); 
+        let params = buildBodyRequest();
+        sendRequest(params).then(items =>{
+            drawItems(items, true);
+        });
     });
     let dateFilter = document.querySelector('.dateFilter');
     dateFilter.addEventListener('click', function(){
-        date == "ASC" ? "DESC" : "ASC"
+       date =  date == "ASC" ? "DESC" : "ASC";
+       sessionStorage.setItem("CurrentRequestPage", 1); 
+       let params = buildBodyRequest();
+            sendRequest(params).then(items =>{
+                drawItems(items, true);
+            });
+            
     });
+
     let selectPages= document.querySelectorAll('.PagesSelect');
     selectPages.forEach(item=>{
         item.addEventListener('click', function(){
+            sessionStorage.setItem("CurrentRequestPage", 1); 
             let pagesAmount = item.getAttribute('data-pageAmount');
             if(limit> 100){ // prevent database overload
                 return;
             }
             limit = pagesAmount;
-        });
+            let params = buildBodyRequest();
+            sendRequest(params).then(items =>{
+                drawItems(items, true);
+            });
+            
+        }, {once: true});
     });
 
-    
 
-    fetch('/products/loaditems?')
+        function intersectionObserver() {
+        const loadingLabel = document.querySelector('.intersectionObserverDiv');
+        loadingLabel.style.display = "flex";
+        const options = {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.9,
+        }
+        const observer = new IntersectionObserver(handleLoad, options);
+        observer.observe(loadingLabel);
+    }
+    function handleLoad(loadingTrigger, observer) {
+        if (loadingTrigger[0].intersectionRatio > 0.9) {
+            if(sessionStorage.getItem("CurrentRequestPage")== null){
+                sessionStorage.setItem("CurrentRequestPage", 1); 
+            }
+            else{
+                let currState = Number(sessionStorage.getItem("CurrentRequestPage"));
+                console.log(currState);
+                sessionStorage.setItem("CurrentRequestPage", currState+1); 
+            }    
+           let params = buildBodyRequest();
+            sendRequest(params).then(items =>{
+                drawItems(items);
+                let loadingLabel = document.querySelector('.intersectionObserverDiv');
+                 if(Array.isArray(items) && items.length === 0){
+                        
+                        loadingLabel.textContent= "No more items left";
+                        return;
+                    }
+                loadingLabel.textContent= "Loading ...";
+            });
+        }
+    }
+
+
+    function buildBodyRequest(){
+        const params = new URLSearchParams();
+        let page = sessionStorage.getItem('CurrentRequestPage') === null ? 1 : sessionStorage.getItem('CurrentRequestPage');
+        
+        // Handle arrays like category
+        category.forEach(c => params.append("category[]", c));
+        params.append("price", price);
+        params.append("date", date);
+        params.append("limit", limit);
+        params.append("page", page);
+        return params.toString();
+    }
+// if(sessionStorage.getItem('currentPage')== null){
+//             sessionStorage.setItem('currentPage', 2);
+//         }else{
+//             let currentPage = sessionStorage.getItem('currentPage');
+//             sessionStorage.setItem('currentPage', currentPage+1);
+//         }
+    
 }
+async function sendRequest(string){
+    try{
+        const response = await fetch('/products/loaditems?'+string);
+        if(!response.ok){
+            throw new Error("Rresponse status :" + response.status);
+        }
+        const result = await response.json();
+        return result;
+    }catch(e){
+        console.error(e);
+    }
+}
+
+function drawItems(items, redraw = false){
+    let location = document.querySelector('.shopWrapper');
+
+     if (redraw == true) {
+        location.textContent = "";
+    }
+
+    // Очищаем содержимое места назначения
+    items.forEach(item => {
+            console.log(); 
+        let images= [];
+        images[0] = item['image_location'] + "/"+ item['image_name'];
+        if(Array.isArray(item.images)){
+            for(let i = 0; i< item['images'].length; i++){
+                images.push(item['images'][i]['image_location'] + "/" + item['images'][i]['image_name']);
+            }
+
+        }
+        
+        let div = document.createElement("div");
+        div.className = "Item";
+        div.setAttribute('data-IdItem', item['id']);
+        div.addEventListener('click', (event) => {
+            scaleItem(event.currentTarget.getAttribute('data-IdItem'));
+
+        });
+        let imgWrapper = document.createElement("div");
+        imgWrapper.className = "imgWrapper";
+
+        let img = document.createElement("img");
+        img.src = window.location.origin + "/storage/" +images[0]; // Предполагается, что item['image_urls'] - это массив URL изображений
+        img.className = "ItemImg";
+
+        imgWrapper.appendChild(img);
+        div.appendChild(imgWrapper);
+
+        let titleSpan = document.createElement("span");
+        titleSpan.className = "ItemTitle";
+        titleSpan.textContent = item['title'];
+
+        let descriptionSpan = document.createElement("span");
+        descriptionSpan.className = "ItemDescription";
+        descriptionSpan.textContent = item['description'];
+
+        let priceSpan = document.createElement("span");
+        priceSpan.className = "ItemPrice";
+        priceSpan.textContent = item['price'] + "£";
+        priceSpan.setAttribute('data-itemId', item['id'])
+        priceSpan.addEventListener('click', (event) => {
+            event.stopPropagation();
+            let id = event.currentTarget.getAttribute("data-itemId")
+            cartBuy(+id);
+        })
+        div.appendChild(titleSpan);
+        div.appendChild(descriptionSpan);
+        div.appendChild(priceSpan);
+
+        setTimeout(() => {
+            div.classList.add('added');
+            
+        }, 300);
+        location.appendChild(div);
+    });
+}
+

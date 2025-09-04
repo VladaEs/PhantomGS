@@ -530,15 +530,15 @@
 
 
 .intersectionObserverDiv {
-  
-  justify-content: center;
   color:#fff;
   text-transform: uppercase;
   font-size: var(--fontsizeM);
   width: 100%;
-  margin-top: 15%;
+  margin-top: 5%;
   margin-bottom: 5%;
-  display: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 

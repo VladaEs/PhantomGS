@@ -128,8 +128,7 @@ class AdminController extends Controller
             'title' => $validated['itemName'],
             'description' => $validated['itemDescription'],
             'price' => $validated['itemPrice'],
-            'associatedService' => $validated['associatedService'],
-            'service_id' => $validated['itemPrice'],
+            'service_id' => $validated['associatedService'],
         ]);
 
         $folder = 'shopImages';

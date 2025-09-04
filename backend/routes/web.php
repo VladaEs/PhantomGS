@@ -20,6 +20,7 @@ Route::get('/contacts', [ContactsController::class, 'index'])->name('contacts');
 
 Route::prefix('products')->group(function(){
     Route::get('/', [StoreController::class, 'index'])->name('products');
+    Route::get('/loaditems', [StoreController::class, 'loadItems'])->name('loadItems');
 });
 
 
